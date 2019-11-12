@@ -1,0 +1,135 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+vector<string> lista_tarefas_global;
+
+void adicionar_tarefa_antigo(string tarefa){
+    
+    ofstream tarefas;
+    tarefas.open("lista_tarefas.txt", ios::app);
+    tarefas << tarefa << endl;
+    
+    tarefas.close ();
+}
+
+
+void ler_arquivo(){
+    
+    ifstream arq_tarefas;
+    string tarefa;
+    
+    arq_tarefas.open("lista_tarefas.txt");
+    
+    while(!arq_tarefas.eof()){
+        getline(arq_tarefas, tarefa);
+        if(!tarefa.empty()){
+            lista_tarefas_global.push_back(tarefa);
+        }
+    }
+    
+    sort(lista_tarefas_global.begin(), lista_tarefas_global.end());
+
+    arq_tarefas.close ();
+    
+}
+
+void adicionar_tarefa(string tarefa){
+    
+    
+    lista_tarefas_global.push_back(tarefa);
+    sort(lista_tarefas_global.begin(), lista_tarefas_global.end());
+
+    
+    ofstream tarefas;
+    tarefas.open("lista_tarefas.txt");
+    
+    for(string t: lista_tarefas_global){
+        tarefas << t << endl;
+    }
+    
+    tarefas.close ();
+}
+
+void apagar_tarefa(int tarefa_a_apagar){
+    
+    lista_tarefas_global.erase(lista_tarefas_global.begin() + tarefa_a_apagar);
+
+    ofstream tarefas;
+    tarefas.open("lista_tarefas.txt");
+    
+    for(string t: lista_tarefas_global){
+        tarefas << t << endl;
+    }
+    
+    tarefas.close ();
+}
+
+void mostrar_tarefas(){
+    cout << "suas tarefas são: " << endl;
+    
+    for (int i = 0; i < lista_tarefas_global.size(); i++) {
+        cout << "[" << i << "] " << lista_tarefas_global[i] << endl; 
+    }
+    
+}
+
+int main () {
+    
+    ler_arquivo();
+
+    
+    int opcao;
+    int tarefa_a_apagar;
+    string nomet;
+    
+    do {
+        cout << endl << endl << "**MENU**" << endl;
+        cout << "[1] adicionar tarefa" << endl;
+        cout << "[2] ver as tarefas " << endl;
+        cout << "[3] apagar tarefa" << endl;
+
+        cout << "[0] sair" << endl;
+        cin >> opcao;
+        cin.ignore(1, '\n'); //bypass
+        
+        switch(opcao){
+            case 1:
+                cout << "Digite uma tarefa" << endl;
+                
+                //cin >> nomet;
+                getline(cin, nomet);
+                
+                adicionar_tarefa(nomet);
+                break;
+            
+            case 2:
+                mostrar_tarefas();
+                break;
+                
+            case 3:
+                mostrar_tarefas();
+                cout << "ashdhsad huaidh asduhasidush???" << endl;
+                cin >> tarefa_a_apagar;
+                apagar_tarefa(tarefa_a_apagar);
+                break;
+            
+            case 0:
+                cout << "ATE LOGO!";
+                break;
+                
+            default :
+                cout << "opcao invalida" << endl;
+                break;
+        }
+        
+        
+        
+    } while(opcao != 0);
+
+
+    return 0;
+  }
